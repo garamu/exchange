@@ -9,7 +9,6 @@ export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
 export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 export const API_URL = 'http://localhost:3001';
-const log = require('simple-console-logger');
 // *****
 // LOGIN
 // *****
@@ -59,8 +58,7 @@ export function login(creds: Object) {
 					dispatch(loginFailure(err.message));
 				} else {
 					// eslint-disable-next-line no-undef
-					// localStorage.setItem('authId', res.body.userid);
-					log.info(res);
+					localStorage.setItem('excuser', res.body.username);
 					dispatch(loginSuccess(res.body));
 				}
 			});
