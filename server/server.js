@@ -3,6 +3,8 @@
 // 'use strict'
 
 // first we import our dependencies…
+const log = require('simple-console-logger');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -56,6 +58,11 @@ router.route('/users/').get((req, res) => {
 	});
 });
 
+router.route('/user/authenticate/').post((req, res) => {
+	log.info(req.body);
+	User.findOne({ displayname: req.body.username, password: req.body.password }, (err, user) => res.json(user));
+});
+
 // Add User
 // adding the /user/add route to our /api router
 router.route('/user/add').post((req, res) => {
@@ -67,7 +74,7 @@ router.route('/user/add').post((req, res) => {
 	user.save((err) => {
 		if (err) {
 			res.send(err);
-			res.json({ user });
 		}
+		res.json({ user });
 	});
 });
