@@ -57,7 +57,7 @@ class Register extends Component {
 		};
 		this.setState({ submitted: true });
 		if (user.firstName && user.lastName && user.username && user.email && user.password) {
-			this.props.dispatch(Register(user));
+			this.props.dispatch(register(user));
 		}
 	};
 

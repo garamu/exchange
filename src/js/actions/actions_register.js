@@ -17,9 +17,9 @@ export function registerRequest(user: Object) {
 }
 export function registerSuccess(user: Object) {
 	const profile = {
-		displayname: user.displayname,
-		name: user.name,
-		surname: user.surname,
+		username: user.username,
+		firstName: user.firstName,
+		lastName: user.lastName,
 		email: user.email
 	};
 	return {

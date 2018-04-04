@@ -17,6 +17,7 @@
     "import"
   ],
   "rules": {
+    "linebreak-style": ["error", "windows"],
     "comma-dangle": ["error", "never"],
     "global-require": ["off"],
     "indent": ["error", "tab"],
@@ -27,7 +28,7 @@
     "jsx-quotes": ["error", "prefer-single"],
     "react/forbid-prop-types": ["off"],
     "react/no-array-index-key": ["off"],
-		"react/no-find-dom-node": ["off"],
+    "react/no-find-dom-node": ["off"],
     "react/require-default-props": ["off"],
     "react/self-closing-comp": ["off"],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
