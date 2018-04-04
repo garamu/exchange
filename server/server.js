@@ -37,7 +37,7 @@ app.use((req, res, next) => {
 	next();
 });
 // now we can set the route path & initialize the API
-router.get('/', (req, res) => {
+router.get('/api', (req, res) => {
 	res.json({ message: 'API Initialized!' });
 });
 // Use our router configuration when we call /api
@@ -70,6 +70,7 @@ router.route('/user/add').post((req, res) => {
 	user.name = req.body.name;
 	user.surname = req.body.surname;
 	user.displayname = req.body.displayname;
+	user.password = req.body.password;
 	user.email = req.body.email;
 	user.save((err) => {
 		if (err) {

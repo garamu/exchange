@@ -23,11 +23,17 @@ export function loginRequest(creds: Object) {
 }
 
 export function loginSuccess(user: Object) {
+	const profile = {
+		displayname: user.displayname,
+		name: user.name,
+		surname: user.surname,
+		email: user.email
+	};
 	return {
 		type: LOGIN_SUCCESS,
 		isFetching: false,
 		isAuthenticated: true,
-		profile: user
+		profile
 	};
 }
 
@@ -58,7 +64,7 @@ export function login(creds: Object) {
 					dispatch(loginFailure(err.message));
 				} else {
 					// eslint-disable-next-line no-undef
-					localStorage.setItem('excuser', res.body.username);
+					localStorage.setItem('exc_user', res.body.displayname);
 					dispatch(loginSuccess(res.body));
 				}
 			});
