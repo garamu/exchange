@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 /* eslint-disable*/
 import Login from 'Components/Login/Login';
+import Register from 'Components/Register/Register';
 import NoMatch from 'Components/Route/NoMatch';
 import Main from './Main/Main';
 import PublicRoute from 'Components/Route/PublicRoute';
@@ -16,6 +17,7 @@ const RouterApp = ({ isAuthenticated }) => (
 	<Router>
 		<Switch>
 			<PublicRoute exact path='/' component={Login} isAuthenticated={isAuthenticated} />
+			<PublicRoute exact path='/register' component={Register} isAuthenticated={isAuthenticated} />
 			<PrivateRoute path='/dashboard' component={Main} isAuthenticated={isAuthenticated} />
 			<Route component={NoMatch} />
 		</Switch>

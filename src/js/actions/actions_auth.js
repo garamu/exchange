@@ -24,7 +24,7 @@ export function loginRequest(creds: Object) {
 
 export function loginSuccess(user: Object) {
 	const profile = {
-		displayname: user.displayname,
+		username: user.displayname,
 		name: user.name,
 		surname: user.surname,
 		email: user.email

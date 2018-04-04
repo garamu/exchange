@@ -65,7 +65,7 @@ router.route('/user/authenticate/').post((req, res) => {
 
 // Add User
 // adding the /user/add route to our /api router
-router.route('/user/add').post((req, res) => {
+router.route('/user/register').post((req, res) => {
 	const user = new User();
 	user.name = req.body.name;
 	user.surname = req.body.surname;
