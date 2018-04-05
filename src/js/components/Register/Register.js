@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 /* eslint-disable */
-import { register } from 'Actions/actions_register';
+import { registerUser } from 'Actions/actions_register';
 import AuthError from '../Auth/AuthError';
 /* eslint-enable */
 // Component styles
@@ -57,7 +57,7 @@ class Register extends Component {
 		};
 		this.setState({ submitted: true });
 		if (user.firstName && user.lastName && user.username && user.email && user.password) {
-			this.props.dispatch(register(user));
+			this.props.dispatch(registerUser(user));
 		}
 	};
 
@@ -166,6 +166,12 @@ class Register extends Component {
 										</div>
 										}
 									</div>
+									{errorMessage &&
+									<div className='notification is-danger'>
+										<button className='delete'></button>
+										{errorMessage}
+									</div>
+									}
 									<button
 										type='submit'
 										onClick={this.handleRegister}
@@ -173,9 +179,6 @@ class Register extends Component {
 									>
 										Register
 									</button>
-									{errorMessage &&
-										<AuthError errorMsg={errorMessage} />
-									}
 								</form>
 							</div>
 							<p className='has-text-grey'>
@@ -195,8 +198,8 @@ Register.propTypes = {
 };
 
 function mapStateToProps(state) {
-	const { auth } = state;
-	const { errorMessage } = auth;
+	const { register } = state;
+	const { errorMessage } = register;
 
 	return {
 		errorMessage

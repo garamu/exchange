@@ -46,7 +46,7 @@ export function registerFailure(message: string) {
 	};
 }
 
-export function register(user: Object) {
+export function registerUser(user: Object) {
 	return (dispatch: Function) => {
 		dispatch(registerRequest(user));
 		request
@@ -60,8 +60,8 @@ export function register(user: Object) {
 					dispatch(registerFailure(err.message));
 				} else {
 					console.log(res);
-					if (res.err) {
-						dispatch(registerFailure(res.message));
+					if (res.body.err) {
+						dispatch(registerFailure(res.body.message));
 					} else {
 						// eslint-disable-next-line no-undef
 						dispatch(registerSuccess(res.body));
