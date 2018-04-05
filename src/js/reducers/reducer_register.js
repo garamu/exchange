@@ -1,4 +1,5 @@
 import {
+	REGISTER_INIT_STATE,
 	REGISTER_REQUEST,
 	REGISTER_SUCCESS,
 	REGISTER_FAILURE
@@ -14,6 +15,11 @@ const initialState = {
 
 export default function auth(state = initialState, action) {
 	switch (action.type) {
+	case REGISTER_INIT_STATE:
+		return {
+			...state,
+			isRegistered: false
+		};
 	case REGISTER_REQUEST:
 		return {
 			...state,

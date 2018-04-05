@@ -67,16 +67,22 @@ router.route('/user/authenticate/').post((req, res) => {
 // Add User
 // adding the /user/add route to our /api router
 router.route('/user/register').post((req, res) => {
-	const user = new User();
-	user.firstName = req.body.firstName;
-	user.lastName = req.body.lastName;
-	user.username = req.body.username;
-	user.password = req.body.password;
-	user.email = req.body.email;
-	user.save((err) => {
-		if (err) {
-			res.send(err);
+	User.findOne({ username: req.body.username }, (err, user) => {
+		if (err) { return err; }
+		if (!user) {
+			const newUser = new User();
+			newUser.firstName = req.body.firstName;
+			newUser.lastName = req.body.lastName;
+			newUser.username = req.body.username;
+			newUser.password = req.body.password;
+			newUser.email = req.body.email;
+			newUser.save((errSave) => {
+				if (errSave) {
+					res.send(errSave);
+				}
+				res.json({ newUser });
+			});
 		}
-		res.json({ user });
+		return res.json({ err: true, message: 'user already exist' });
 	});
 });

@@ -17,8 +17,7 @@ import RegisterRoute from 'Components/Route/RegisterRoute';
 const RouterApp = ({ isAuthenticated, isRegistered }) => (
 	<Router>
 		<Switch>
-			<PublicRoute exact path='/' component={Login} isAuthenticated={isAuthenticated} />
-			<PublicRoute exact path='/login' component={Login} isAuthenticated={isAuthenticated} />
+			<PublicRoute path='/login' component={Login} isAuthenticated={isAuthenticated} />
 			<RegisterRoute exact path='/register' component={Register} isRegistered={isRegistered} />
 			<PrivateRoute path='/dashboard' component={Main} isAuthenticated={isAuthenticated} />
 			<Route component={NoMatch} />

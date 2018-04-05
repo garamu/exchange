@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 /* eslint-disable */
 import { login } from 'Actions/actions_auth';
+import { registerInitState } from 'Actions/actions_register';
 import AuthError from '../Auth/AuthError';
 /* eslint-enable */
 import people from './assets/people_anonymous.gif';
@@ -19,7 +20,9 @@ class Login extends Component {
 			password: ''
 		};
 	}
-
+	componentDidMount = () => {
+		this.props.dispatch(registerInitState(false));
+	};
 	handleUser = (e) => {
 		const userInput = e.target.value;
 		this.setState({ user: userInput });

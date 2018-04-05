@@ -2,10 +2,18 @@
 
 import request from 'superagent';
 
+export const REGISTER_INIT_STATE = 'REGISTER_INIT_STATE';
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAILURE = 'REGISTER_FAILURE';
 export const API_URL = 'http://localhost:3001';
+
+export function registerInitState() {
+	return {
+		type: REGISTER_INIT_STATE,
+		isRegistered: false
+	};
+}
 
 export function registerRequest(user: Object) {
 	return {
@@ -51,8 +59,13 @@ export function register(user: Object) {
 					console.log('Oh no! error');
 					dispatch(registerFailure(err.message));
 				} else {
-					// eslint-disable-next-line no-undef
-					dispatch(registerSuccess(res.body));
+					console.log(res);
+					if (res.err) {
+						dispatch(registerFailure(res.message));
+					} else {
+						// eslint-disable-next-line no-undef
+						dispatch(registerSuccess(res.body));
+					}
 				}
 			});
 	};
