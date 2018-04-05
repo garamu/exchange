@@ -23,6 +23,7 @@ module.exports = {
 	resolve: {
 		alias: {
 			Actions: resolve(__dirname, './src/js/actions'),
+			Helpers: resolve(__dirname, './src/js/helpers'),
 			Components: resolve(__dirname, './src/js/components'),
 			Views: resolve(__dirname, './src/js/views')
 		},

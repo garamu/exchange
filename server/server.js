@@ -19,7 +19,8 @@ const port = process.env.API_PORT || 3001;
 
 // MONGO
 // db config
-mongoose.connect('mongodb://myuser:123456@192.168.99.100:32772/exchange');
+// mongoose.connect('mongodb://myuser:123456@192.168.99.100:32772/exchange');
+mongoose.connect('mongodb://admin@localhost:32772/exchange');
 
 // now we should configure the API to use bodyParser and look for
 // JSON data in the request body
@@ -60,7 +61,7 @@ router.route('/users/').get((req, res) => {
 
 router.route('/user/authenticate/').post((req, res) => {
 	log.info(req.body);
-	User.findOne({ displayname: req.body.username, password: req.body.password }, (err, user) => res.json(user));
+	User.findOne({ username: req.body.username, password: req.body.password }, (err, user) => res.json(user));
 });
 
 // Add User

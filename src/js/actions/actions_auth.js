@@ -24,9 +24,9 @@ export function loginRequest(creds: Object) {
 
 export function loginSuccess(user: Object) {
 	const profile = {
-		username: user.displayname,
-		name: user.name,
-		surname: user.surname,
+		username: user.username,
+		firstName: user.firstName,
+		lastName: user.lastName,
 		email: user.email
 	};
 	return {
@@ -64,7 +64,7 @@ export function login(creds: Object) {
 					dispatch(loginFailure(err.message));
 				} else {
 					// eslint-disable-next-line no-undef
-					localStorage.setItem('exc_user', res.body.displayname);
+					localStorage.setItem('exc_user', res.body.username);
 					dispatch(loginSuccess(res.body));
 				}
 			});
@@ -83,6 +83,7 @@ export function logoutRequest() {
 }
 
 export function logoutSuccess() {
+	localStorage.removeItem('exc_user');
 	return {
 		type: LOGOUT_SUCCESS,
 		isFetching: false,
