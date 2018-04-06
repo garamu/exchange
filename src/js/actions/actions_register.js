@@ -58,14 +58,11 @@ export function registerUser(user: Object) {
 				if (err || !res.ok) {
 					console.log('Oh no! error');
 					dispatch(registerFailure(err.message));
+				} else if (res.body.err) {
+					dispatch(registerFailure(res.body.message));
 				} else {
-					console.log(res);
-					if (res.body.err) {
-						dispatch(registerFailure(res.body.message));
-					} else {
-						// eslint-disable-next-line no-undef
-						dispatch(registerSuccess(res.body));
-					}
+					// eslint-disable-next-line no-undef
+					dispatch(registerSuccess(res.body));
 				}
 			});
 	};

@@ -6,7 +6,7 @@ const PublicRoute = ({ isRegistered, component: Component, ...rest }) => (
 	<Route
 		{...rest}
 		render={props => (
-			!isRegistered ? <Component {...props} /> : <Redirect to='/login' />
+			!isRegistered ? <Component {...props} /> : <Redirect to='/' />
 		)}
 	/>
 );
