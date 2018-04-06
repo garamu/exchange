@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 /* eslint-disable */
 import { login } from 'Actions/actions_auth';
+import { registerInitState } from 'Actions/actions_register';
 import AuthError from '../Auth/AuthError';
 /* eslint-enable */
-
+import people from './assets/people_anonymous.gif';
 // Component styles
 // import './Login.scss';
 
@@ -18,7 +20,9 @@ class Login extends Component {
 			password: ''
 		};
 	}
-
+	componentDidMount = () => {
+		this.props.dispatch(registerInitState(false));
+	};
 	handleUser = (e) => {
 		const userInput = e.target.value;
 		this.setState({ user: userInput });
@@ -33,7 +37,7 @@ class Login extends Component {
 		e.preventDefault();
 
 		const credentials = {
-			user: this.state.user,
+			username: this.state.user,
 			password: this.state.password
 		};
 
@@ -45,49 +49,61 @@ class Login extends Component {
 		const { user, password } = this.state;
 
 		return (
-			<div className='exc-login'>
-				<div className='exc-login__title'>
-					<span className='exc-login__logo'></span>
-					<h3>Login</h3>
+
+			<section className='hero is-fullheight'>
+				<div className='hero-body'>
+					<div className='container has-text-centered'>
+						<div className='column is-4 is-offset-4'>
+							<h3 className='title has-text-grey'>Login</h3>
+							<p className='subtitle has-text-grey'>Please login to proceed.</p>
+							<div className='box'>
+								<figure className='avatar'>
+									<img src={people} alt='' />
+								</figure>
+								<form>
+									<div className='field'>
+										<div className='control'>
+											<input
+												onChange={this.handleUser}
+												className='input is-large'
+												type='email'
+												value={user}
+												placeholder='Username'
+												required
+											/>
+										</div>
+									</div>
+									<div className='field'>
+										<div className='control'>
+											<input
+												onChange={this.handlePassword}
+												className='input is-large'
+												type='password'
+												value={password}
+												required
+												placeholder='Your Password'
+											/>
+										</div>
+									</div>
+									<button
+										type='submit'
+										onClick={this.handlelogin}
+										className='button is-block is-info is-large is-fullwidth'
+									>
+										Login
+									</button>
+									{errorMessage &&
+										<AuthError errorMsg={errorMessage} />
+									}
+								</form>
+							</div>
+							<p className='has-text-grey'>
+								<Link to='/register'>Sign Up</Link>&nbsp;·&nbsp;
+							</p>
+						</div>
+					</div>
 				</div>
-				<form className='exc-login__wrapper'>
-					<div className='exc-input__wrapper'>
-						<input
-							onChange={this.handleUser}
-							id='dynamic-label-user'
-							className='input is-medium'
-							type='text'
-							placeholder='User'
-							value={user}
-							required
-						/>{
-							// eslint-disable-next-line
-						}<label htmlFor='dynamic-label-user'>User</label>
-					</div>
-					<div className='exc-input__wrapper'>
-						<input
-							onChange={this.handlePassword}
-							id='dynamic-label-password'
-							className='input is-medium'
-							type='password'
-							placeholder='Password'
-							value={password}
-							required
-						/>{
-							// eslint-disable-next-line
-						}<label htmlFor='dynamic-label-password'>Password</label>
-					</div>
-					<button
-						type='submit'
-						className='exc-login__btn button is-info is-medium'
-						onClick={this.handlelogin}
-					>Entra
-					</button>
-					{errorMessage &&
-						<AuthError errorMsg={errorMessage} />
-					}
-				</form>
-			</div>
+			</section>
 		);
 	}
 }

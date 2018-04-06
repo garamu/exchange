@@ -1,6 +1,7 @@
 import React from 'react';
 /* eslint-disable */
-import Logout from 'Components/Logout/Logout';
+import Header from 'Components/Header/Header';
+
 
 // import Header from 'Components/Header/Header';
 // import Dashboard from '../Dashboard/Dashboard';
@@ -12,7 +13,7 @@ import './Main.scss';
 
 const Main = () => (
 	<div className='exc-app'>
-		<Logout />
+		<Header />
 		MAIN
 	</div>
 );

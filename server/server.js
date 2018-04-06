@@ -3,6 +3,8 @@
 // 'use strict'
 
 // first we import our dependencies…
+const log = require('simple-console-logger');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -17,6 +19,7 @@ const port = process.env.API_PORT || 3001;
 
 // MONGO
 // db config
+// mongoose.connect('mongodb://myuser:123456@192.168.99.100:32772/exchange');
 mongoose.connect('mongodb://admin@localhost:32772/exchange');
 
 // now we should configure the API to use bodyParser and look for
@@ -35,7 +38,7 @@ app.use((req, res, next) => {
 	next();
 });
 // now we can set the route path & initialize the API
-router.get('/', (req, res) => {
+router.get('/api', (req, res) => {
 	res.json({ message: 'API Initialized!' });
 });
 // Use our router configuration when we call /api
@@ -56,18 +59,30 @@ router.route('/users/').get((req, res) => {
 	});
 });
 
+router.route('/user/authenticate/').post((req, res) => {
+	log.info(req.body);
+	User.findOne({ username: req.body.username, password: req.body.password }, (err, user) => res.json(user));
+});
+
 // Add User
 // adding the /user/add route to our /api router
-router.route('/user/add').post((req, res) => {
-	const user = new User();
-	user.name = req.body.name;
-	user.surname = req.body.surname;
-	user.displayname = req.body.displayname;
-	user.email = req.body.email;
-	user.save((err) => {
-		if (err) {
-			res.send(err);
-			res.json({ user });
+router.route('/user/register').post((req, res) => {
+	User.findOne({ username: req.body.username }, (err, user) => {
+		if (err) { return err; }
+		if (!user) {
+			const newUser = new User();
+			newUser.firstName = req.body.firstName;
+			newUser.lastName = req.body.lastName;
+			newUser.username = req.body.username;
+			newUser.password = req.body.password;
+			newUser.email = req.body.email;
+			newUser.save((errSave) => {
+				if (errSave) {
+					res.send(errSave);
+				}
+				res.json({ newUser });
+			});
 		}
+		return res.json({ err: true, message: 'user already exist' });
 	});
 });

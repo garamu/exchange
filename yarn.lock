@@ -1422,7 +1422,7 @@ builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
 
-bulma@^0.6.1:
+bulma@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.6.2.tgz#f4b1d11d5acc51a79644eb0a2b0b10649d3d71f5"
 
@@ -7012,6 +7012,12 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
+simple-console-logger@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/simple-console-logger/-/simple-console-logger-2.0.2.tgz#23e3f5772f5fcb000bbe2b3065310bcfcb084f6d"
+  dependencies:
+    speed-date "^0.2.1"
+
 slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
@@ -7193,6 +7199,10 @@ spdy@^3.4.1:
     safe-buffer "^5.0.1"
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
+
+speed-date@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/speed-date/-/speed-date-0.2.1.tgz#49238fd479a675a642e6c745e0bf798ade5f77fc"
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"

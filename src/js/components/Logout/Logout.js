@@ -28,13 +28,13 @@ class Logout extends Component {
 
 	render() {
 		return (
-			<div className='exc-modal--logout modal is-active'>
-				<div className='exc-modal__box box'>
-					<div className='exc-modal__buttons'>
-						<a className='exc-modal__btn--cancel button is-info' onClick={this.cancelLogout}>Annulla</a>
-						<a className='exc-modal__btn--confirm button is-danger' onClick={this.confirmLogout}>Conferma</a>
-					</div>
-				</div>
+			<div className='navbar-dropdown is-boxed'>
+				{/* <p className='control'>
+					<span><a onClick={this.cancelLogout}>Annulla</a></span>
+				</p> */}
+				<p className='control'>
+					<span><a onClick={this.confirmLogout}>Conferma</a></span>
+				</p>
 			</div>
 		);
 	}

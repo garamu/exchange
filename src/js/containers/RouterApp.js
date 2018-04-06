@@ -5,33 +5,39 @@ import { connect } from 'react-redux';
 
 /* eslint-disable*/
 import Login from 'Components/Login/Login';
+import Register from 'Components/Register/Register';
 import NoMatch from 'Components/Route/NoMatch';
 import Main from './Main/Main';
 import PublicRoute from 'Components/Route/PublicRoute';
 import PrivateRoute from 'Components/Route/PrivateRoute';
+import RegisterRoute from 'Components/Route/RegisterRoute';
 /* eslint-enable */
 
 
-const RouterApp = ({ isAuthenticated }) => (
+const RouterApp = ({ isAuthenticated, isRegistered }) => (
 	<Router>
 		<Switch>
-			<PublicRoute exact path='/' component={Login} isAuthenticated={isAuthenticated} />
 			<PrivateRoute path='/dashboard' component={Main} isAuthenticated={isAuthenticated} />
+			<RegisterRoute path='/register' component={Register} isRegistered={isRegistered} />
+			<PublicRoute path='/' component={Login} isAuthenticated={isAuthenticated} />
 			<Route component={NoMatch} />
 		</Switch>
 	</Router>
 );
 
 function mapStateToProps(state) {
-	const { auth } = state;
+	const { auth, register } = state;
 	const { isAuthenticated } = auth;
+	const { isRegistered } = register;
 	return {
-		isAuthenticated
+		isAuthenticated,
+		isRegistered
 	};
 }
 
 RouterApp.propTypes = {
-	isAuthenticated: PropTypes.bool.isRequired
+	isAuthenticated: PropTypes.bool.isRequired,
+	isRegistered: PropTypes.bool
 };
 
 export default connect(mapStateToProps)(RouterApp);
