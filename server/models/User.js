@@ -1,3 +1,5 @@
+
+/* eslint-disable */
 'use strict';
 //import dependency
 var mongoose = require('mongoose');
@@ -9,7 +11,8 @@ var UsersSchema = new Schema({
  lastName: String,
  username: String,
  password: String,
- email: String
+ email: String,
+ role: String
 });
 //export our module to use in server.js
 module.exports = mongoose.model('User', UsersSchema);

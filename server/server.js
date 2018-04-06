@@ -10,6 +10,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 /* eslint import/no-unresolved: 2 */
 const User = require('../server/models/user');
+const Album = require('../server/models/album');
 
 const app = express();
 const router = express.Router();
@@ -48,6 +49,7 @@ app.listen(port, () => {
 	console.log(`api running on port ${port}`);
 });
 
+// ********************* USER SECTION ***************
 router.route('/users/').get((req, res) => {
 	User.find((err, users) => {
 		if (err) {
@@ -76,6 +78,7 @@ router.route('/user/register').post((req, res) => {
 			newUser.username = req.body.username;
 			newUser.password = req.body.password;
 			newUser.email = req.body.email;
+			newUser.role = req.body.role ? req.body.role : 'user';
 			newUser.save((errSave) => {
 				if (errSave) {
 					res.send(errSave);
@@ -84,5 +87,25 @@ router.route('/user/register').post((req, res) => {
 			});
 		}
 		return res.json({ err: true, message: 'user already exist' });
+	});
+});
+
+// ********************* ALBUM SECTION ***************
+// Add Album
+// adding the /album/add route to our /api router
+router.route('/album/add').post((req, res) => {
+	User.findOne({ name: req.body.name }, (err, album) => {
+		if (err) { return err; }
+		if (!album) {
+			const newAlbum = new Album();
+			newAlbum.name = req.body.name;
+			newAlbum.save((errSave) => {
+				if (errSave) {
+					res.send(errSave);
+				}
+				res.json({ newAlbum });
+			});
+		}
+		return res.json({ err: true, message: 'album already exist' });
 	});
 });
