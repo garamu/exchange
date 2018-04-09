@@ -45,7 +45,7 @@ class Login extends Component {
 	};
 
 	render() {
-		const { errorMessage } = this.props;
+		// const { errorMessage } = this.props;
 		const { user, password } = this.state;
 		// const SubmitButton = withRouter(() => (
 		// 	<button
@@ -99,9 +99,9 @@ class Login extends Component {
 										className='button is-block is-info is-large is-fullwidth'
 									>Login
 									</button>
-									{errorMessage &&
+									{/* {errorMessage &&
 										<AuthError errorMsg={errorMessage} />
-									}
+									} */}
 								</form>
 							</div>
 							<p className='has-text-grey'>
@@ -116,17 +116,18 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-	dispatch: PropTypes.func.isRequired,
-	errorMessage: PropTypes.string
+	dispatch: PropTypes.func.isRequired
+	// errorMessage: PropTypes.string
 };
 
-function mapStateToProps(state) {
-	const { auth } = state;
-	const { errorMessage } = auth;
+// function mapStateToProps(state) {
+// 	const { auth } = state;
+// 	const { errorMessage } = auth;
+//
+// 	return {
+// 		errorMessage
+// 	};
+// }
 
-	return {
-		errorMessage
-	};
-}
-
-export default connect(mapStateToProps)(Login);
+export default connect()(Login);
+// export default connect(mapStateToProps)(Login);

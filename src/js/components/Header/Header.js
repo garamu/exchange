@@ -39,7 +39,7 @@ class Header extends Component {
 					<div className='navbar-end'>
 						<div className='navbar-item has-dropdown is-hoverable'>
 							<a className='navbar-link'>{user.firstName}</a>
-							<Logout profile={user} />
+							<Logout user={user} />
 						</div>
 					</div>
 				</div>
@@ -53,12 +53,12 @@ Header.propTypes = {
 };
 
 function mapStateToProps(state) {
-	const { auth, session } = state;
-	const { profile } = auth;
+	const { session } = state;
+	// const { profile } = auth;
 	const { user } = session;
 
 	return {
-		profile,
+		// profile,
 		user
 	};
 }
