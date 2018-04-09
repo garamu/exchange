@@ -38,10 +38,7 @@ class Header extends Component {
 					</div>
 					<div className='navbar-end'>
 						<div className='navbar-item has-dropdown is-hoverable'>
-							<p className='navbar-item'>
-								<span>{profile.firstName}</span>
-							</p>
-							<a className='navbar-link'>Esci</a>
+							<a className='navbar-link'>{profile.firstName}</a>
 							<Logout profile={profile} />
 						</div>
 					</div>

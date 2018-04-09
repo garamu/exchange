@@ -32,9 +32,11 @@ class Logout extends Component {
 				{/* <p className='control'>
 					<span><a onClick={this.cancelLogout}>Annulla</a></span>
 				</p> */}
-				<p className='control'>
-					<span><a onClick={this.confirmLogout}>Conferma</a></span>
-				</p>
+				<a className='navbar-item' onClick={this.confirmLogout}>
+					<div className='navbar-content'>
+						<p>Logout</p>
+					</div>
+				</a>
 			</div>
 		);
 	}
