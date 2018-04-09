@@ -18,6 +18,7 @@
   ],
   "rules": {
     # "linebreak-style": ["error", "windows"],
+    "no-underscore-dangle": ["off"],
     "comma-dangle": ["error", "never"],
     "global-require": ["off"],
     "indent": ["error", "tab"],

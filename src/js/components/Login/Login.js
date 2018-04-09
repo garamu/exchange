@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 /* eslint-disable */
-import { login } from 'Actions/actions_auth';
+// import { login } from 'Actions/actions_auth';
+import { login } from 'Actions/actions_session';
 import { registerInitState } from 'Actions/actions_register';
 import AuthError from '../Auth/AuthError';
 /* eslint-enable */
@@ -33,9 +34,8 @@ class Login extends Component {
 		this.setState({ password: passwordInput });
 	};
 
-	handlelogin = (e) => {
-		e.preventDefault();
-
+	handlelogin = () => {
+		// e.preventDefault();
 		const credentials = {
 			username: this.state.user,
 			password: this.state.password
@@ -47,7 +47,14 @@ class Login extends Component {
 	render() {
 		const { errorMessage } = this.props;
 		const { user, password } = this.state;
-
+		// const SubmitButton = withRouter(() => (
+		// 	<button
+		// 		onClick={() => this.handlelogin()}
+		// 		type='submit'
+		// 		className='button is-block is-info is-large is-fullwidth'
+		// 	>Login
+		// 	</button>
+		// ));
 		return (
 
 			<section className='hero is-fullheight'>
@@ -66,7 +73,7 @@ class Login extends Component {
 											<input
 												onChange={this.handleUser}
 												className='input is-large'
-												type='email'
+												type='text'
 												value={user}
 												placeholder='Username'
 												required
@@ -85,12 +92,12 @@ class Login extends Component {
 											/>
 										</div>
 									</div>
+									{/* <SubmitButton /> */}
 									<button
+										onClick={() => this.handlelogin()}
 										type='submit'
-										onClick={this.handlelogin}
 										className='button is-block is-info is-large is-fullwidth'
-									>
-										Login
+									>Login
 									</button>
 									{errorMessage &&
 										<AuthError errorMsg={errorMessage} />

@@ -16,7 +16,7 @@ class Header extends Component {
 	}
 
 	render() {
-		const { profile } = this.props;
+		const { user } = this.props;
 		return (
 			<nav className='navbar is-transparent'>
 				<div className='navbar-brand'>
@@ -38,8 +38,8 @@ class Header extends Component {
 					</div>
 					<div className='navbar-end'>
 						<div className='navbar-item has-dropdown is-hoverable'>
-							<a className='navbar-link'>{profile.firstName}</a>
-							<Logout profile={profile} />
+							<a className='navbar-link'>{user.firstName}</a>
+							<Logout profile={user} />
 						</div>
 					</div>
 				</div>
@@ -48,15 +48,18 @@ class Header extends Component {
 	}
 }
 Header.propTypes = {
-	profile: PropTypes.object
+	// profile: PropTypes.object,
+	user: PropTypes.object
 };
 
 function mapStateToProps(state) {
-	const { auth } = state;
+	const { auth, session } = state;
 	const { profile } = auth;
+	const { user } = session;
 
 	return {
-		profile
+		profile,
+		user
 	};
 }
 

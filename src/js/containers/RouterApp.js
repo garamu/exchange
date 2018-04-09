@@ -14,29 +14,35 @@ import RegisterRoute from 'Components/Route/RegisterRoute';
 /* eslint-enable */
 
 
-const RouterApp = ({ isAuthenticated, isRegistered }) => (
+const RouterApp = ({ authenticated, checked, isRegistered }) => (
 	<Router>
 		<Switch>
-			<PrivateRoute path='/dashboard' component={Main} isAuthenticated={isAuthenticated} />
+			{ checked &&
+				<PrivateRoute path='/dashboard' component={Main} authenticated={authenticated} />
+			}
 			<RegisterRoute path='/register' component={Register} isRegistered={isRegistered} />
-			<PublicRoute path='/' component={Login} isAuthenticated={isAuthenticated} />
+			<PublicRoute path='/' component={Login} authenticated={authenticated} />
 			<Route component={NoMatch} />
 		</Switch>
 	</Router>
 );
 
 function mapStateToProps(state) {
-	const { auth, register } = state;
-	const { isAuthenticated } = auth;
+	// const { auth, register, session } = state;
+	const { register, session } = state;
+	// const { isAuthenticated } = auth;
 	const { isRegistered } = register;
+	const { checked, authenticated } = session;
 	return {
-		isAuthenticated,
-		isRegistered
+		authenticated,
+		isRegistered,
+		checked
 	};
 }
 
 RouterApp.propTypes = {
-	isAuthenticated: PropTypes.bool.isRequired,
+	authenticated: PropTypes.bool,
+	checked: PropTypes.bool.isRequired,
 	isRegistered: PropTypes.bool
 };
 
