@@ -29,18 +29,36 @@ class Login extends Component {
 		this.setState({ user: userInput });
 	};
 
+	// handleImapAuth = () => {
+	// 	const imapCredentials = {
+	// 		auth: {
+	// 			user: this.state.user,
+	// 			pass: this.state.password
+	// 		},
+	// 		ignoreTLS: true
+	// 	};
+	// 	// const imapCredentials = {
+	// 	// 	imap: {
+	// 	// 		user: this.state.user,
+	// 	// 		password: this.state.password,
+	// 	// 		host: 'ex-mail.tiscali.com',
+	// 	// 		port: 143
+	// 	// 	}
+	// 	// };
+	// 	const client = new ImapClient('ex-mail.tiscali.com', 143, imapCredentials);
+	// 	client.connect().then(() => { this.handlelogin(client); });
+	// };
+
 	handlePassword = (e) => {
 		const passwordInput = e.target.value;
 		this.setState({ password: passwordInput });
 	};
 
-	handlelogin = () => {
-		// e.preventDefault();
+	handleLogin = () => {
 		const credentials = {
 			username: this.state.user,
 			password: this.state.password
 		};
-
 		this.props.dispatch(login(credentials));
 	};
 
@@ -94,7 +112,7 @@ class Login extends Component {
 									</div>
 									{/* <SubmitButton /> */}
 									<button
-										onClick={() => this.handlelogin()}
+										onClick={() => this.handleLogin()}
 										type='submit'
 										className='button is-block is-info is-large is-fullwidth'
 									>Login

@@ -7,6 +7,10 @@ const log = require('simple-console-logger');
 
 const express = require('express');
 const mongoose = require('mongoose');
+
+const Imap = require('imap');
+// const { inspect } = require('util');
+
 const bodyParser = require('body-parser');
 /* eslint import/no-unresolved: 2 */
 const User = require('../server/models/user');
@@ -62,8 +66,27 @@ router.route('/users/').get((req, res) => {
 });
 
 router.route('/user/authenticate/').post((req, res) => {
-	log.info(req.body);
-	User.findOne({ username: req.body.username, password: req.body.password }, (err, user) => res.json(user));
+	const { username, password } = req.body;
+	if (username.indexOf('@')) {
+		const imap = new Imap({
+			user: username,
+			password,
+			host: 'ex-mail.tiscali.com',
+			port: 143,
+			tls: false
+		});
+		imap.connect();
+		imap.once('ready', () => {
+			log.info('user IMAP logged : ', username);
+			imap.end();
+			User.findOne({ email: username }, (err, user) => res.json(user));
+		});
+		imap.once('error', (err) => {
+			log.info('imap error', err);
+		});
+	} else {
+		User.findOne({ username, password }, (err, user) => res.json(user));
+	}
 });
 
 // Add User
