@@ -93,7 +93,7 @@ const ldapAuthentication = (username, password, callback) => {
 	const ldap = new LdapAuth(ldapConfig);
 	ldap.authenticate(username, password, (err, user) => {
 		if (user) {
-			console.log('user exist');
+			console.log('user LDAP logged : ', username);
 			callback(setUserLogged(true));
 		} else if (err || !user) {
 			console.log('ERR: ', err);

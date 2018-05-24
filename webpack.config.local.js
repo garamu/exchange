@@ -67,11 +67,6 @@ module.exports = {
 			}
 		]
 	},
-	node: {
-		net: 'mock',
-		tls: 'empty',
-		fs: 'empty'
-	},
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.LoaderOptionsPlugin({ options: {} })
