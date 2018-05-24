@@ -9,6 +9,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const Imap = require('imap');
+const LdapAuth = require('ldapauth-fork');
 // const { inspect } = require('util');
 
 const bodyParser = require('body-parser');
@@ -22,6 +23,7 @@ const router = express.Router();
 // it up, or 3001
 const port = process.env.API_PORT || 3001;
 
+let userLogged = false;
 // MONGO
 // db config
 // mongoose.connect('mongodb://myuser:123456@192.168.99.100:32772/exchange');
@@ -53,6 +55,53 @@ app.listen(port, () => {
 	console.log(`api running on port ${port}`);
 });
 
+const setUserLogged = (status) => {
+	userLogged = status;
+	return userLogged;
+};
+
+const imapAuthentication = (username, password, callback) => {
+	if (username.indexOf('@') > -1) {
+		const imap = new Imap({
+			user: username,
+			password,
+			host: 'ex-mail.tiscali.com',
+			port: 143,
+			tls: false
+		});
+		imap.connect();
+		imap.once('ready', () => {
+			log.info('user IMAP logged : ', username);
+			imap.end();
+			callback(setUserLogged(true));
+		});
+		imap.once('error', (err) => {
+			log.info('imap error', err);
+			callback(setUserLogged(false));
+		});
+	}
+};
+
+const ldapAuthentication = (username, password, callback) => {
+	const ldapConfig = {
+		url: 'ldap://root-dc1.tiscali.com:3268',
+		bindDN: username,
+		bindCredentials: password,
+		searchFilter: `(&(objectCategory=person)(objectClass=user)(mail=${username}))`,
+		searchBase: 'dc=tiscali,dc=com'
+	};
+	const ldap = new LdapAuth(ldapConfig);
+	ldap.authenticate(username, password, (err, user) => {
+		if (user) {
+			console.log('user exist');
+			callback(setUserLogged(true));
+		} else if (err || !user) {
+			console.log('ERR: ', err);
+			callback(setUserLogged(false));
+		}
+	});
+};
+
 // ********************* USER SECTION ***************
 router.route('/users/').get((req, res) => {
 	User.find((err, users) => {
@@ -67,26 +116,19 @@ router.route('/users/').get((req, res) => {
 
 router.route('/user/authenticate/').post((req, res) => {
 	const { username, password } = req.body;
-	if (username.indexOf('@')) {
-		const imap = new Imap({
-			user: username,
-			password,
-			host: 'ex-mail.tiscali.com',
-			port: 143,
-			tls: false
-		});
-		imap.connect();
-		imap.once('ready', () => {
-			log.info('user IMAP logged : ', username);
-			imap.end();
+	ldapAuthentication(username, password, (ldapStatus) => {
+		if (ldapStatus) {
 			User.findOne({ email: username }, (err, user) => res.json(user));
-		});
-		imap.once('error', (err) => {
-			log.info('imap error', err);
-		});
-	} else {
-		User.findOne({ username, password }, (err, user) => res.json(user));
-	}
+		} else {
+			imapAuthentication(username, password, (imapStatus) => {
+				if (imapStatus) {
+					User.findOne({ email: username }, (err, user) => res.json(user));
+				} else {
+					res.send({ err: true, message: 'user already exist' });
+				}
+			});
+		}
+	});
 });
 
 // Add User
