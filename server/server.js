@@ -60,6 +60,15 @@ const setUserLogged = (status) => {
 	return userLogged;
 };
 
+const getUserName = (username) => {
+	if (username.indexOf('@') > -1) {
+		const userarray = username.split('@');
+		/* eslint-disable no-unused-vars */
+		const [full, user] = userarray;
+		return user;
+	}
+	return username;
+};
 const imapAuthentication = (username, password, callback) => {
 	if (username.indexOf('@') > -1) {
 		const imap = new Imap({
@@ -79,6 +88,8 @@ const imapAuthentication = (username, password, callback) => {
 			log.info('imap error', err);
 			callback(setUserLogged(false));
 		});
+	} else {
+		callback(setUserLogged(false));
 	}
 };
 
@@ -93,10 +104,9 @@ const ldapAuthentication = (username, password, callback) => {
 	const ldap = new LdapAuth(ldapConfig);
 	ldap.authenticate(username, password, (err, user) => {
 		if (user) {
-			console.log('user LDAP logged : ', username);
 			callback(setUserLogged(true));
 		} else if (err || !user) {
-			console.log('ERR: ', err);
+			log.info('LDAP_ERR: ', err);
 			callback(setUserLogged(false));
 		}
 	});
@@ -117,14 +127,31 @@ router.route('/users/').get((req, res) => {
 router.route('/user/authenticate/').post((req, res) => {
 	const { username, password } = req.body;
 	ldapAuthentication(username, password, (ldapStatus) => {
+		log.info('try LDAP auth');
 		if (ldapStatus) {
+			log.info('LDAP authenticated');
 			User.findOne({ email: username }, (err, user) => res.json(user));
 		} else {
+			log.info('try IMAP auth');
 			imapAuthentication(username, password, (imapStatus) => {
 				if (imapStatus) {
-					User.findOne({ email: username }, (err, user) => res.json(user));
+					log.info('LDAP authenticated');
+					User.findOne({ email: username }, (err, user) => {
+						if (err) {
+							res.send({ err: true, message: 'user not found' });
+						}
+						res.json(user);
+					});
 				} else {
-					res.send({ err: true, message: 'user already exist' });
+					log.info('try STANDARD auth');
+					const name = getUserName(username);
+					User.findOne({ username: name, password }, (err, user) => {
+						if (err) {
+							res.send({ err: true, message: 'user not found' });
+						}
+						log.info('STANDARD user authenticated');
+						res.json(user);
+					});
 				}
 			});
 		}
