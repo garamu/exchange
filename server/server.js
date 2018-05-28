@@ -6,6 +6,7 @@
 const log = require('simple-console-logger');
 
 const express = require('express');
+const acl = require('express-acl');
 const mongoose = require('mongoose');
 
 const Imap = require('imap');
@@ -24,6 +25,23 @@ const router = express.Router();
 const port = process.env.API_PORT || 3001;
 
 let userLogged = false;
+
+// Express ACL
+const configObject = {
+	baseUrl: 'api',
+	filename: 'acl.json',
+	path: 'server/config'
+};
+
+const responseObject = {
+	status: 'Access Denied',
+	message: 'You are not authorized to access this resource'
+};
+
+acl.config(configObject, responseObject);
+app.use(acl.authorize);
+
+
 // MONGO
 // db config
 // mongoose.connect('mongodb://myuser:123456@192.168.99.100:32772/exchange');
@@ -126,6 +144,7 @@ router.route('/users/').get((req, res) => {
 
 router.route('/user/authenticate/').post((req, res) => {
 	const { username, password } = req.body;
+	setUserLogged(false);
 	ldapAuthentication(username, password, (ldapStatus) => {
 		log.info('try LDAP auth');
 		if (ldapStatus) {
@@ -147,6 +166,7 @@ router.route('/user/authenticate/').post((req, res) => {
 					const name = getUserName(username);
 					User.findOne({ username: name, password }, (err, user) => {
 						if (err) {
+							log.info('USER not found');
 							res.send({ err: true, message: 'user not found' });
 						}
 						log.info('STANDARD user authenticated');

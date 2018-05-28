@@ -25,10 +25,15 @@ export function login(creds: Object) {
 				if (err || !res.ok) {
 					console.log('Oh no! error');
 				} else {
-					const { token } = res.body._id;
-					sessionService.saveSession({ token });
-					sessionService.saveUser(res.body);
-					console.log(sessionService);
+					const { body } = res;
+					if (body) {
+						const { token } = body._id;
+						sessionService.saveSession({ token });
+						sessionService.saveUser(res.body);
+						console.log(sessionService);
+					} else {
+						console.log('response body null');
+					}
 				}
 			});
 	};
