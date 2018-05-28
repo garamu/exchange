@@ -7,6 +7,11 @@ const log = require('simple-console-logger');
 
 const express = require('express');
 const mongoose = require('mongoose');
+
+const Imap = require('imap');
+const LdapAuth = require('ldapauth-fork');
+// const { inspect } = require('util');
+
 const bodyParser = require('body-parser');
 /* eslint import/no-unresolved: 2 */
 const User = require('../server/models/user');
@@ -18,6 +23,7 @@ const router = express.Router();
 // it up, or 3001
 const port = process.env.API_PORT || 3001;
 
+let userLogged = false;
 // MONGO
 // db config
 // mongoose.connect('mongodb://myuser:123456@192.168.99.100:32772/exchange');
@@ -49,6 +55,63 @@ app.listen(port, () => {
 	console.log(`api running on port ${port}`);
 });
 
+const setUserLogged = (status) => {
+	userLogged = status;
+	return userLogged;
+};
+
+const getUserName = (username) => {
+	if (username.indexOf('@') > -1) {
+		const userarray = username.split('@');
+		/* eslint-disable no-unused-vars */
+		const [full, user] = userarray;
+		return user;
+	}
+	return username;
+};
+const imapAuthentication = (username, password, callback) => {
+	if (username.indexOf('@') > -1) {
+		const imap = new Imap({
+			user: username,
+			password,
+			host: 'ex-mail.tiscali.com',
+			port: 143,
+			tls: false
+		});
+		imap.connect();
+		imap.once('ready', () => {
+			log.info('user IMAP logged : ', username);
+			imap.end();
+			callback(setUserLogged(true));
+		});
+		imap.once('error', (err) => {
+			log.info('imap error', err);
+			callback(setUserLogged(false));
+		});
+	} else {
+		callback(setUserLogged(false));
+	}
+};
+
+const ldapAuthentication = (username, password, callback) => {
+	const ldapConfig = {
+		url: 'ldap://root-dc1.tiscali.com:3268',
+		bindDN: username,
+		bindCredentials: password,
+		searchFilter: `(&(objectCategory=person)(objectClass=user)(mail=${username}))`,
+		searchBase: 'dc=tiscali,dc=com'
+	};
+	const ldap = new LdapAuth(ldapConfig);
+	ldap.authenticate(username, password, (err, user) => {
+		if (user) {
+			callback(setUserLogged(true));
+		} else if (err || !user) {
+			log.info('LDAP_ERR: ', err);
+			callback(setUserLogged(false));
+		}
+	});
+};
+
 // ********************* USER SECTION ***************
 router.route('/users/').get((req, res) => {
 	User.find((err, users) => {
@@ -62,8 +125,37 @@ router.route('/users/').get((req, res) => {
 });
 
 router.route('/user/authenticate/').post((req, res) => {
-	log.info(req.body);
-	User.findOne({ username: req.body.username, password: req.body.password }, (err, user) => res.json(user));
+	const { username, password } = req.body;
+	ldapAuthentication(username, password, (ldapStatus) => {
+		log.info('try LDAP auth');
+		if (ldapStatus) {
+			log.info('LDAP authenticated');
+			User.findOne({ email: username }, (err, user) => res.json(user));
+		} else {
+			log.info('try IMAP auth');
+			imapAuthentication(username, password, (imapStatus) => {
+				if (imapStatus) {
+					log.info('LDAP authenticated');
+					User.findOne({ email: username }, (err, user) => {
+						if (err) {
+							res.send({ err: true, message: 'user not found' });
+						}
+						res.json(user);
+					});
+				} else {
+					log.info('try STANDARD auth');
+					const name = getUserName(username);
+					User.findOne({ username: name, password }, (err, user) => {
+						if (err) {
+							res.send({ err: true, message: 'user not found' });
+						}
+						log.info('STANDARD user authenticated');
+						res.json(user);
+					});
+				}
+			});
+		}
+	});
 });
 
 // Add User

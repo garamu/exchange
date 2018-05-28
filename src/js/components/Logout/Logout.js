@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // eslint-disable-next-line
-import { logout } from 'Actions/actions_auth';
+import { logout } from 'Actions/actions_session';
 
 // Component Styles
 // import './Logout.scss';

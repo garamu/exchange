@@ -1,9 +1,12 @@
 import { combineReducers } from 'redux';
-import auth from '../reducers/reducer_auth';
+import { sessionReducer } from 'redux-react-session';
+
+// import auth from '../reducers/reducer_auth';
 import register from '../reducers/reducer_register';
 
 const rootReducer = combineReducers({
-	auth,
+	session: sessionReducer,
+	// auth,
 	register
 });
 

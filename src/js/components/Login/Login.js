@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 /* eslint-disable */
-import { login } from 'Actions/actions_auth';
+// import { login } from 'Actions/actions_auth';
+import { login } from 'Actions/actions_session';
 import { registerInitState } from 'Actions/actions_register';
 import AuthError from '../Auth/AuthError';
 /* eslint-enable */
@@ -28,26 +29,50 @@ class Login extends Component {
 		this.setState({ user: userInput });
 	};
 
+	// handleImapAuth = () => {
+	// 	const imapCredentials = {
+	// 		auth: {
+	// 			user: this.state.user,
+	// 			pass: this.state.password
+	// 		},
+	// 		ignoreTLS: true
+	// 	};
+	// 	// const imapCredentials = {
+	// 	// 	imap: {
+	// 	// 		user: this.state.user,
+	// 	// 		password: this.state.password,
+	// 	// 		host: 'ex-mail.tiscali.com',
+	// 	// 		port: 143
+	// 	// 	}
+	// 	// };
+	// 	const client = new ImapClient('ex-mail.tiscali.com', 143, imapCredentials);
+	// 	client.connect().then(() => { this.handlelogin(client); });
+	// };
+
 	handlePassword = (e) => {
 		const passwordInput = e.target.value;
 		this.setState({ password: passwordInput });
 	};
 
-	handlelogin = (e) => {
-		e.preventDefault();
-
+	handleLogin = () => {
 		const credentials = {
 			username: this.state.user,
 			password: this.state.password
 		};
-
 		this.props.dispatch(login(credentials));
 	};
 
 	render() {
-		const { errorMessage } = this.props;
+		// const { errorMessage } = this.props;
 		const { user, password } = this.state;
-
+		// const SubmitButton = withRouter(() => (
+		// 	<button
+		// 		onClick={() => this.handlelogin()}
+		// 		type='submit'
+		// 		className='button is-block is-info is-large is-fullwidth'
+		// 	>Login
+		// 	</button>
+		// ));
 		return (
 
 			<section className='hero is-fullheight'>
@@ -66,7 +91,7 @@ class Login extends Component {
 											<input
 												onChange={this.handleUser}
 												className='input is-large'
-												type='email'
+												type='text'
 												value={user}
 												placeholder='Username'
 												required
@@ -85,16 +110,16 @@ class Login extends Component {
 											/>
 										</div>
 									</div>
+									{/* <SubmitButton /> */}
 									<button
+										onClick={() => this.handleLogin()}
 										type='submit'
-										onClick={this.handlelogin}
 										className='button is-block is-info is-large is-fullwidth'
-									>
-										Login
+									>Login
 									</button>
-									{errorMessage &&
+									{/* {errorMessage &&
 										<AuthError errorMsg={errorMessage} />
-									}
+									} */}
 								</form>
 							</div>
 							<p className='has-text-grey'>
@@ -109,17 +134,18 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-	dispatch: PropTypes.func.isRequired,
-	errorMessage: PropTypes.string
+	dispatch: PropTypes.func.isRequired
+	// errorMessage: PropTypes.string
 };
 
-function mapStateToProps(state) {
-	const { auth } = state;
-	const { errorMessage } = auth;
+// function mapStateToProps(state) {
+// 	const { auth } = state;
+// 	const { errorMessage } = auth;
+//
+// 	return {
+// 		errorMessage
+// 	};
+// }
 
-	return {
-		errorMessage
-	};
-}
-
-export default connect(mapStateToProps)(Login);
+export default connect()(Login);
+// export default connect(mapStateToProps)(Login);
